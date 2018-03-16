@@ -26,7 +26,6 @@ import java.util.ArrayList;
 
 public abstract class Critter {
 	private static String myPackage;
-	private	static List<Critter> population = new java.util.ArrayList<Critter>();
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();
 	private static Set<Critter> critSet = new HashSet<Critter>();
   
@@ -190,8 +189,6 @@ public abstract class Critter {
 	    }
 	}
 	
-	
-	
 	/**
 	 * Gets a list of critters of a specific type.
 	 * @param critter_class_name What kind of Critter is to be listed.  Unqualified class name.
@@ -275,8 +272,8 @@ public abstract class Critter {
 		 * ArrayList that has been provided in the starter code.  In any case, it has to be
 		 * implemented for grading tests to work.
 		 */
-		protected static List<Critter> getPopulation() {
-			return population;
+		protected static Set<Critter> getCritSet() {
+			return critSet;
 		}
 		
 		/*
@@ -294,7 +291,8 @@ public abstract class Critter {
 	 * Clear the world of all critters, dead and alive
 	 */
 	public static void clearWorld() {
-		// Complete this method.
+		critSet.clear();
+		babies.clear();
 	}
 	
 	public static void worldTimeStep() {
@@ -309,12 +307,12 @@ public abstract class Critter {
 					if ((c1.x_coord == c2.x_coord) && (c1.y_coord == c2.y_coord)) {
 						int c1Roll;
 						int c2Roll;
-						if (c1.fight(c2.toString())) {
+						if ((c1.fight(c2.toString())) && (c1.energy > 0)) {
 							c1Roll = getRandomInt(c1.energy);
 						} else { 
 							c1Roll = 0;
 						}
-						if (c2.fight(c2.toString())) {
+						if ((c2.fight(c2.toString())) && (c2.energy > 0)) {
 							c2Roll = getRandomInt(c2.energy);
 						} else {
 							c2Roll = 0;

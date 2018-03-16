@@ -1,6 +1,5 @@
 package assignment4;
 
-
 /*
  * Example critter
  * Do not change or submit this file.
