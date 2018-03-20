@@ -14,6 +14,9 @@ package assignment4;
 
 import java.util.Scanner;
 import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.lang.reflect.*;
 
 /*
  * Usage: java <pkgname>.Main <input file> test
@@ -95,8 +98,14 @@ public class Main {
                 		numCritters = Integer.parseInt(tokens[2]);
                 	}
                 	for (int i = 0; i < numCritters; i++) {
-                		Critter.makeCritter("assignment4." + tokens[1]);
+                		Critter.makeCritter(myPackage + "." + tokens[1]);
                 	}
+                } else if ((tokens[0].equals("stats")) && (tokens.length == 2)) {
+                	List<Critter> critterInstances= new ArrayList<Critter>();
+                	critterInstances = Critter.getInstances(myPackage + "." + tokens[1]);
+                	Class<?> c = Class.forName(myPackage + "." + tokens[1]);
+                	Method m = c.getMethod("runStats", List.class);
+                	m.invoke(null, critterInstances);
                 } else {
                 	throw new Exception();
                 }

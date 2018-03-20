@@ -182,6 +182,7 @@ public abstract class Critter {
 			crit.energy = Params.start_energy;
 			  
 			critSet.add(crit);
+			
 	    } catch (Exception e) {
 			throw new InvalidCritterException(critter_class_name);
 	    } catch (Error e) {
