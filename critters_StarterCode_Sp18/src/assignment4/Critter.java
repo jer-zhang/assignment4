@@ -92,7 +92,7 @@ public abstract class Critter {
 	 * @param isRunning false if walking, true if running
 	 * @return true if location is empty, false otherwise
 	 */
-	private boolean look(int direction, boolean isRunning) {
+	protected boolean look(int direction, boolean isRunning) {
 		ArrayList<Integer> coords = new ArrayList<Integer>();
 		coords.add(x_coord);
 		coords.add(y_coord);
