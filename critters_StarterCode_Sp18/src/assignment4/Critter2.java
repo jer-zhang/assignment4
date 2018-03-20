@@ -28,7 +28,7 @@ public class Critter2 extends Critter {
 		if (dir == 0 || dir == 4) {
 			return true;
 		} else {
-			int rand = getRandomInt(1);
+			int rand = getRandomInt(8);
 			if(look(rand, false)) {
 				walk(rand);
 			}
