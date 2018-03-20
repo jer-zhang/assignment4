@@ -343,7 +343,9 @@ public abstract class Critter {
       	for (Critter c : tempSet) {
       		critSet.remove(c);
       	}
+      	tempSet.clear();
       	for (Critter baby : babies) {
+      		baby.moved = false;
           	critSet.add(baby);
         }
       	

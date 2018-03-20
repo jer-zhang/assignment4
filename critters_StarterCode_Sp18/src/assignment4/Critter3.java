@@ -5,7 +5,8 @@ public class Critter3 extends Critter {
 	@Override
 	public void doTimeStep() {
 		if (getEnergy() > 100) {
-			if (getRandomInt(100) < getEnergy()-100) {
+			int random = getRandomInt(100);
+			if (random < getEnergy()%100) {
 				Critter3 child = new Critter3();
 				reproduce(child, getRandomInt(8));
 			} else {
