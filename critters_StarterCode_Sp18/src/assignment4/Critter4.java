@@ -14,7 +14,7 @@ public class Critter4 extends Critter{
 			run(getRandomInt(8));
 		} else {
 			walk(getRandomInt(8));
-			if (getRandomInt(10) > 9) {
+			if (getRandomInt(10) == 9) {
 				Critter4 child = new Critter4();
 				reproduce(child, getRandomInt(8));
 			}
