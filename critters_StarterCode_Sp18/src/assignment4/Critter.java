@@ -273,7 +273,7 @@ public abstract class Critter {
 		 * ArrayList that has been provided in the starter code.  In any case, it has to be
 		 * implemented for grading tests to work.
 		 */
-		protected static Set<Critter> getCritSet() {
+		protected static Set<Critter> getPopulation() {
 			return critSet;
 		}
 		
@@ -348,7 +348,7 @@ public abstract class Critter {
       		baby.moved = false;
           	critSet.add(baby);
         }
-      	
+      	babies.clear();
       	for (int i = 0; i < Params.refresh_algae_count; i++) {
           	Algae alga = new Algae();
           	alga.setX_coord(getRandomInt(Params.world_width));
