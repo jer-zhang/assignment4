@@ -2,14 +2,14 @@ package assignment4;
 /* CRITTERS Main.java
  * EE422C Project 4 submission by
  * Replace <...> with your actual data.
- * <Student1 Name>
+ * Jerry Zhang
  * <Student1 EID>
  * <Student1 5-digit Unique No.>
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
- * Slip days used: <0>
- * Fall 2016
+ * Celine Lillie
+ * Cml3665
+ * 15460
+ * Slip days used: 0
+ * Spring 2018
  */
 
 import java.util.Scanner;
@@ -22,6 +22,12 @@ import java.lang.reflect.*;
  * Usage: java <pkgname>.Main <input file> test
  * input file is optional.  If input file is specified, the word 'test' is optional.
  * May not use 'test' argument without specifying input file.
+ */
+
+/**
+ * This class holds the controller of the Critter world
+ * @author Jerry Zhang, Celine Lillie
+ *
  */
 public class Main {
 
@@ -73,44 +79,50 @@ public class Main {
         /* Write your code below. */
         while (true) {
           	System.out.print("critters>");
-        	String command = kb.nextLine();
+        	String command = kb.nextLine();				// Take keyboard line and split into tokens
 			String[] tokens = command.split("[ \t]+");
 			try {
                 if ((tokens[0].equals("quit")) && (tokens.length == 1)) {
+                	// If the only token is quit, break out of while loop
                     break;
                 } else if ((tokens[0].equals("show")) && (tokens.length == 1)) {
+                	// If the only token is show, display world
                     Critter.displayWorld();
                 } else if ((tokens[0].equals("step")) && (tokens.length <= 2)) {
+                	// If there are 2 tokens, "step" and a number, loops worldTimeStep number of times
                     if (tokens.length == 2) {
 						for (int i = 0; i < Integer.parseInt(tokens[1]); i++) {
 							Critter.worldTimeStep();
                         }
                     } else if (tokens.length == 1) {
+                    	// If the only token is step, step worldTimeStep once
 						Critter.worldTimeStep();
                     }
                 } else if ((tokens[0].equals("seed")) && (tokens.length == 2)) {
+                	// If there are 2 tokens, "seed" and a number, generate seed
                   	Critter.setSeed(Integer.parseInt(tokens[1]));
                 } else if ((tokens[0].equals("make")) && (tokens.length <= 3) && (tokens.length > 1)) {
-                	int numCritters;
+                	// If there are 2-3 tokens, "make", name, and maybe number
+                	int numCritters;			// Temp holder of number of critter to make
                 	if (tokens.length == 2) {
                 		numCritters = 1;
                 	} else {
                 		numCritters = Integer.parseInt(tokens[2]);
                 	}
                 	for (int i = 0; i < numCritters; i++) {
-                		Critter.makeCritter(myPackage + "." + tokens[1]);
+                		Critter.makeCritter(myPackage + "." + tokens[1]);	// Loop makeCritter, numCritters times
                 	}
-                } else if ((tokens[0].equals("stats")) && (tokens.length == 2)) {
-                	List<Critter> critterInstances= new ArrayList<Critter>();
-                	critterInstances = Critter.getInstances(myPackage + "." + tokens[1]);
-                	Class<?> c = Class.forName(myPackage + "." + tokens[1]);
-                	Method m = c.getMethod("runStats", List.class);
-                	m.invoke(null, critterInstances);
+                } else if ((tokens[0].equals("stats")) && (tokens.length == 2)) {	// Display stats (# of critters present on board)
+                	List<Critter> critterInstances= new ArrayList<Critter>();		// Array of instances
+                	critterInstances = Critter.getInstances(myPackage + "." + tokens[1]);	// Get list of instances of critter desired
+                	Class<?> c = Class.forName(myPackage + "." + tokens[1]);		// Create class of critter
+                	Method m = c.getMethod("runStats", List.class);					// Get the method "runStats" in that class
+                	m.invoke(null, critterInstances);								// Invoke method passing list of instance
                 } else {
-                	throw new Exception();
+                	throw new Exception();									// Throw exception if any exception occurs (forName, parseInt)
                 }
             } catch (Exception e) {
-              	System.out.println("error processsing: " + command);
+              	System.out.println("error processsing: " + command);		// Error line
             }
         }
         // System.out.println("GLHF");
