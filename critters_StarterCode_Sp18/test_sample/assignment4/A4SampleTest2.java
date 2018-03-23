@@ -45,7 +45,7 @@ public class A4SampleTest2 {
 	// Utility method.
 	/**
 	 *  Move n steps in the specified direction.
-	 *  @param current x, current y, direction to move, steps to move
+	 *  current x, current y, direction to move, steps to move
 	 *  @return new co-ordinates. 
 	 */
 	public static int[] moveStep(int x_coord, int y_coord, int direction, int n) {

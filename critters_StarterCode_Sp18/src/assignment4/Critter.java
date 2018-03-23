@@ -3,8 +3,8 @@ package assignment4;
  * EE422C Project 4 submission by
  * Replace <...> with your actual data.
  * Jerry Zhang
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
+ * jz9954
+ * 15465
  * Celine Lillie
  * Cml3665
  * 15460
@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public abstract class Critter {
 	private static String myPackage;											// String of our package name
 	private static List<Critter> babies = new java.util.ArrayList<Critter>();	// Baby Critter list
-	private static Set<Critter> critSet = new HashSet<Critter>();				// Critter set
+	private static ArrayList<Critter> critList = new ArrayList<Critter>();				// Critter set
   
 	// Gets the package name.  This assumes that Critter and its subclasses are all in the same package.
 	static {
@@ -129,7 +129,7 @@ public abstract class Critter {
 		if (isRunning) {
 			move(direction, coords);	// "Run" which updates coordds in array
 		}
-		for (Critter c : critSet) {		// If there is a critter in the set with same updated coord, return false
+		for (Critter c : critList) {		// If there is a critter in the set with same updated coord, return false
 			if ((c.x_coord == coords.get(0)) && (c.y_coord == coords.get(1))) {
 				return false;
 			}
@@ -214,14 +214,14 @@ public abstract class Critter {
 	 */
 	public static void makeCritter(String critter_class_name) throws InvalidCritterException {
 		try {
-			Class<?> c = Class.forName(critter_class_name);			// Creates class of string passed if class is present
+			Class<?> c = Class.forName(myPackage + "." + critter_class_name);			// Creates class of string passed if class is present
 			Critter crit = (Critter) c.newInstance();				// Creates new instance of class created above
 			
 			crit.x_coord = getRandomInt(Params.world_width);		// Set coords to random and energy to start_energy
 			crit.y_coord = getRandomInt(Params.world_height);
 			crit.energy = Params.start_energy;
 			  
-			critSet.add(crit);										// Add critter to set
+			critList.add(crit);										// Add critter to set
 			
 	    } catch (Exception e) {										// If an error or exception, throw a new instance of InvalidCritterException
 			throw new InvalidCritterException(critter_class_name);
@@ -239,9 +239,9 @@ public abstract class Critter {
 	public static List<Critter> getInstances(String critter_class_name) throws InvalidCritterException {
 		List<Critter> result = new java.util.ArrayList<Critter>();			// List of critter instances
       	try {
-      		if (!critSet.isEmpty()) {										// Iterates through set adding matching critters to result list
-	            for (Critter c : critSet){
-	                if (Class.forName(critter_class_name).isInstance(c)){
+      		if (!critList.isEmpty()) {										// Iterates through set adding matching critters to result list
+	            for (Critter c : critList){
+	                if (Class.forName(myPackage + "." + critter_class_name).isInstance(c)){
 	                  result.add(c);
 	                }
 	            }
@@ -313,8 +313,8 @@ public abstract class Critter {
 		 * ArrayList that has been provided in the starter code.  In any case, it has to be
 		 * implemented for grading tests to work.
 		 */
-		protected static Set<Critter> getPopulation() {
-			return critSet;
+		protected static ArrayList<Critter> getPopulation() {
+			return critList;
 		}
 		
 		/*
@@ -332,7 +332,7 @@ public abstract class Critter {
 	 * Clear the world of all critters, dead and alive
 	 */
 	public static void clearWorld() {
-		critSet.clear();
+		critList.clear();
 		babies.clear();
 	}
 	
@@ -341,14 +341,13 @@ public abstract class Critter {
 	 */
 	public static void worldTimeStep() {
 		// Calls doTimeStep for all critters
-		for (Critter c : critSet) {
+		for (Critter c : critList) {
 			c.doTimeStep();
-			// TODO maybe remove here
 		}
 		
 		// Fight sequence for all critters in set
-		for (Critter c1 : critSet) {
-			for (Critter c2 : critSet) {
+		for (Critter c1 : critList) {
+			for (Critter c2 : critList) {
 				if (c1 != c2) {
 					// If critter is not itself and has the same coords
 					if ((c1.x_coord == c2.x_coord) && (c1.y_coord == c2.y_coord)) {
@@ -381,28 +380,30 @@ public abstract class Critter {
         }      
 		
 		Set<Critter> tempSet = new HashSet<Critter>();	// Temp set of old critters for removal
-      	for (Critter c : critSet) {				
+      	for (Critter c : critList) {				
 			c.moved = false;							// Reset moved flag to false
 			c.energy -= Params.rest_energy_cost;		// Remove rest energy
 			if (c.energy <= 0) {						// If energy is lower than 0, add to tempSet
 				tempSet.add(c);
 			}
 		}
-      	for (Critter c : tempSet) {						// Remove tempSet from critSet
-      		critSet.remove(c);
+      	for (Critter c : tempSet) {						// Remove tempSet from critList
+      		critList.remove(c);
       	}
       	tempSet.clear();								// Clear tempSet to use again
+      	
       	for (Critter baby : babies) {
       		baby.moved = false;							// Set moved flag to false
-          	critSet.add(baby);							// Add babies to critSet
+          	critList.add(baby);							// Add babies to critList
         }
       	babies.clear();									// Clear babies to use again
+      	
       	for (int i = 0; i < Params.refresh_algae_count; i++) {	// Add algae to map
           	Algae alga = new Algae();
           	alga.setX_coord(getRandomInt(Params.world_width));	// Random x, y coords, set energy
           	alga.setY_coord(getRandomInt(Params.world_height));
           	alga.setEnergy(Params.start_energy);
-          	critSet.add(alga);							// Add to critList
+          	critList.add(alga);							// Add to critList
         }
 	}
 	  
@@ -417,7 +418,7 @@ public abstract class Critter {
 				grid.get(y).add(" ");
 			}
 		}
-		for (Critter c : critSet) {									// Add critters to grid
+		for (Critter c : critList) {									// Add critters to grid
 			grid.get(c.y_coord).set(c.x_coord, c.toString());
         }
 		printBorder(Params.world_width);			// Add border

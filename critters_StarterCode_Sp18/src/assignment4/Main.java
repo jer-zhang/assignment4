@@ -3,8 +3,8 @@ package assignment4;
  * EE422C Project 4 submission by
  * Replace <...> with your actual data.
  * Jerry Zhang
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
+ * jz9954
+ * 15465
  * Celine Lillie
  * Cml3665
  * 15460
@@ -82,13 +82,23 @@ public class Main {
         	String command = kb.nextLine();				// Take keyboard line and split into tokens
 			String[] tokens = command.split("[ \t]+");
 			try {
-                if ((tokens[0].equals("quit")) && (tokens.length == 1)) {
-                	// If the only token is quit, break out of while loop
-                    break;
-                } else if ((tokens[0].equals("show")) && (tokens.length == 1)) {
-                	// If the only token is show, display world
-                    Critter.displayWorld();
-                } else if ((tokens[0].equals("step")) && (tokens.length <= 2)) {
+                if (tokens[0].equals("quit")) {
+                	if (tokens.length == 1) {
+                		break;         // If the only token is quit, break out of while loop
+                	} else {
+                		throw new Exception();
+                	}
+                } else if (tokens[0].equals("show")) {
+                	if (tokens.length == 1) {
+                		// If the only token is show, display world
+                		Critter.displayWorld();
+                	} else {
+                		throw new Exception();
+                	}
+                } else if (tokens[0].equals("step")) {
+                	if (tokens.length > 2) {
+                		throw new Exception();
+                	}
                 	// If there are 2 tokens, "step" and a number, loops worldTimeStep number of times
                     if (tokens.length == 2) {
 						for (int i = 0; i < Integer.parseInt(tokens[1]); i++) {
@@ -98,10 +108,17 @@ public class Main {
                     	// If the only token is step, step worldTimeStep once
 						Critter.worldTimeStep();
                     }
-                } else if ((tokens[0].equals("seed")) && (tokens.length == 2)) {
-                	// If there are 2 tokens, "seed" and a number, generate seed
-                  	Critter.setSeed(Integer.parseInt(tokens[1]));
-                } else if ((tokens[0].equals("make")) && (tokens.length <= 3) && (tokens.length > 1)) {
+                } else if (tokens[0].equals("seed")) {
+                	if (tokens.length == 2) {
+                    	// If there are 2 tokens, "seed" and a number, generate seed
+                      	Critter.setSeed(Integer.parseInt(tokens[1]));
+                    } else {
+                		throw new Exception();
+                	}
+                } else if (tokens[0].equals("make")) {
+                	if ((tokens.length > 3) || (tokens.length == 1)) {
+                		throw new Exception();
+                	}
                 	// If there are 2-3 tokens, "make", name, and maybe number
                 	int numCritters;			// Temp holder of number of critter to make
                 	if (tokens.length == 2) {
@@ -110,16 +127,19 @@ public class Main {
                 		numCritters = Integer.parseInt(tokens[2]);
                 	}
                 	for (int i = 0; i < numCritters; i++) {
-                		Critter.makeCritter(myPackage + "." + tokens[1]);	// Loop makeCritter, numCritters times
+                		Critter.makeCritter(tokens[1]);	// Loop makeCritter, numCritters times
                 	}
-                } else if ((tokens[0].equals("stats")) && (tokens.length == 2)) {	// Display stats (# of critters present on board)
-                	List<Critter> critterInstances= new ArrayList<Critter>();		// Array of instances
-                	critterInstances = Critter.getInstances(myPackage + "." + tokens[1]);	// Get list of instances of critter desired
+                } else if (tokens[0].equals("stats")) {								// Display stats (# of critters present on board)
+                	if (tokens.length != 2) {
+                		throw new Exception();
+                	}
+                	List<Critter> critterInstances = new ArrayList<Critter>();		// Array of instances
+                	critterInstances = Critter.getInstances(tokens[1]);				// Get list of instances of critter desired
                 	Class<?> c = Class.forName(myPackage + "." + tokens[1]);		// Create class of critter
                 	Method m = c.getMethod("runStats", List.class);					// Get the method "runStats" in that class
                 	m.invoke(null, critterInstances);								// Invoke method passing list of instance
                 } else {
-                	throw new Exception();									// Throw exception if any exception occurs (forName, parseInt)
+                	System.out.println("invalid command: " + command);
                 }
             } catch (Exception e) {
               	System.out.println("error processsing: " + command);		// Error line
